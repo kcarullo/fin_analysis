@@ -38,3 +38,53 @@ axes1.plot(x,y)
 axes1.set_title('LARGER PLOT')
 axes2.plot(y,x)
 axes2.set_title('smaller plot')
+
+
+fig, axes = plt.subplots(nrows=1,ncols=2)
+for current_ax in axes:
+    current_ax.plot(x,y)
+    
+fig, axes = plt.subplots(nrows=1, ncols=2)
+
+axes[0].plot(x,y)
+axes[0].set_title('First Plot')
+
+axes[1].plot(y,x)
+axes[1].set_title('Second Plot')
+
+plt.tight_layout()
+
+# Figure Size and DPI(dots per inch)
+fig,axes = plt.subplots(nrows=2,ncols=1,figsize=(8,2))
+
+axes[0].plot(x,y)
+axes[1].plot(y,x)
+
+plt.tight_layout()
+
+fig.savefig('my_picture.png', dpi=100)
+
+fig = plt.figure()
+
+ax = fig.add_axes([0,0,1,1])
+
+ax.plot(x, x**2, label='X Squared')
+ax.plot(x, x**3, label='X Cubed')
+
+#loc or location places legend where you want to put it, 0 is best fit
+ax.legend(loc=0)
+
+# setting colors 
+fig = plt.figure()
+
+ax = fig.add_axes([0,0,1,1])
+
+ax.plot(x,y,color='green', lw=3, linestyle='--', marker='*', markersize=20, markerfacecolor='blue', markeredgewidth=3, markeredgecolor='yellow')  
+
+# zooms into a specific portion of the chart
+#ax.set_xlim([0,1])
+#ax.set_ylim([0,2])
+
+# look up RGB hex color
+
+plt.show() 
