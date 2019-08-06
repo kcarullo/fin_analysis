@@ -34,3 +34,28 @@ plt.legend()
 # Find the date for the maximum trading folume for Ford. 
 ford['Volume'].idxmax() # 2013-12-18 00:00:00
 
+# show total traded which is the open price * by the volume traded
+tesla['Total Traded'] = tesla['Open']*tesla['Volume']
+ford['Total Traded'] = ford['Open']*ford['Volume']
+gm['Total Traded'] = gm['Open']*gm['Volume']
+
+tesla['Total Traded'].plot(label='Tesla',figsize=(16,8))
+ford['Total Traded'].plot(label='Ford')
+gm['Total Traded'].plot(label='GM')
+plt.title('Total Traded')
+plt.legend()
+# find the date of the spike in tesla trading 
+tesla['Total Traded'].idxmax() # ('2014-02-25 00:00:00')
+
+# Plot the Moving Averages MA, specifically MA50 and MA200 for GM
+gm['MA50'] = gm['Open'].rolling(50).mean()
+gm['MA200'] = gm['Open'].rolling(200).mean()
+gm[['Open', 'MA50', 'MA200']].plot(figsize=(16,8))
+
+# Scatter matrix between tesla, ford, gm
+from pandas.plotting import scatter_matrix
+car_comp = pd.concat([tesla['Open'],gm['Open'],ford['Open']], axis=1)
+
+car_comp.columns = ['Tesla Open', 'GM Open', 'Ford Open']
+car_comp.head()
+scatter_matrix(car_comp,figsize=(16,6), alpha=0.2,hist_kwds={'bins':50})
