@@ -41,3 +41,43 @@ plt.legend()
 from statsmodels.tsa.seasonal import seasonal_decompose
 decomp = seasonal_decompose(time_series)
 decomp.plot()
+
+from statsmodels.tsa.stattools import adfuller
+result = adfuller(df['Milk in Pounds per Cow'])
+
+def adf_check(time_series):
+    result = adfuller(time_series)
+    print(" Augmented Dicky-Fuller Test")
+    labels = ['ADF Test Statistic', 'p-value', '# of lags', 
+              'Num of Observations used']
+    
+    for value, label in zip(result, labels):
+        print(label+ " : "+str(value))
+        
+    if result[1] <= 0.05:
+        print("Strong evidence against null hypothesis")
+        print("Reject null hypothesis")
+        print("Data has no unit root and is stationary")
+    else:
+        print("Weak evidence against null hypothesis")
+        print("Fail to reject null hypothesis")
+        print("Data has a unit root, it is non-stationary")
+
+adf_check(time_series)
+        
+df['First Difference'] = df['Milk in Pounds per Cow'] - df['Milk in Pounds per Cow'].shift(1)
+df['First Difference'].plot()
+    
+adf_check(df['First Difference'].dropna())
+
+df['Milk Second Difference'] = df['First Difference'] - df['First Difference'].shift(1)
+adf_check(df['Milk Second Difference'].dropna())
+df['First Difference'].plot()
+
+df['Seasonal Difference'] = df['Milk in Pounds per Cow'] - df['Milk in Pounds per Cow'].shift(12)
+df['Seasonal Difference'].plot()
+adf_check(df['Seasonal Difference'].dropna())
+
+df['Seasonal First Difference'] = df['First Difference'] - df['First Difference'].shift(12)
+df['Seasonal First Difference'].plot()
+adf_check(df['Seasonal First Difference'].dropna())
