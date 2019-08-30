@@ -56,3 +56,48 @@ exp_vol = np.sqrt(np.dot(weights.T, np.dot(log_ret.cov()*252,weights)))
 print('Sharpe Ratio')
 SR = exp_return/exp_vol
 print(SR)
+
+
+np.random.seed(101)
+num_ports = 5000
+all_weights = np.zeros((num_ports,len(stocks.columns)))
+ret_arr = np.zeros(num_ports)
+vol_arr = np.zeros(num_ports)
+sharpe_arr = np.zeros(num_ports)
+
+for ind in range(num_ports):
+    
+    # weights
+    weights = np.array(np.random.random(4))
+    weights = weights/np.sum(weights)
+    
+    # Save weights 
+    all_weights[ind,:] = weights 
+    
+    # expected return 
+    ret_arr[ind] = np.sum((log_ret.mean() * weights) * 252) # 252 trading days 
+    
+    # expected valatility 
+    vol_arr[ind] = np.sqrt(np.dot(weights.T, np.dot(log_ret.cov()*252,weights)))
+    
+    # Sharpe Ratio
+    sharpe_arr[ind] = ret_arr[ind] / vol_arr[ind]
+
+sharpe_arr.max()
+
+sharpe_arr.argmax()
+
+all_weights[1420,:]
+
+max_sr_ret = ret_arr[1420]
+max_sr_vol = vol_arr[1420]
+
+
+# visualize the sharpe ratio
+plt.figure(figsize=(12,8))
+plt.scatter(vol_arr, ret_arr, c=sharpe_arr, cmap='plasma')
+plt.colorbar(label='Sharpe Ratio')
+plt.xlabel('Volatility')
+plt.ylabel('Return')
+
+plt.scatter(max_sr_vol, max_sr_ret, c='red', s=50, edgecolors='black')
